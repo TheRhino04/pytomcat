@@ -3,6 +3,7 @@
 import urllib, urllib2, base64, logging
 from parser import parse
 from error import TomcatError
+from retry import retry
 
 class JMXProxyConnection:
     def __init__(self, host, user = 'admin', passwd = 'admin',
@@ -15,6 +16,7 @@ class JMXProxyConnection:
         b64 = base64.standard_b64encode('%s:%s' % (user, passwd))
         self.auth_header = 'Basic %s' % b64
 
+    @retry(TomcatError, tries=3, delay=5, backoff=2, logger=logging.getLogger('pytomcat.jmxproxy'))
     def _do_get(self, request):
         request = urllib2.Request('%s?%s' % (self.baseurl, request))
         cmd_url = request.get_full_url()

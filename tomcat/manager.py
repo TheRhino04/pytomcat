@@ -3,6 +3,8 @@
 import urllib, urllib2, base64, os, logging
 from error import TomcatError
 from events import *
+from retry import retry
+
 
 class ManagerConnection:
     '''
@@ -28,6 +30,7 @@ class ManagerConnection:
     def _cmd_url(self, command, parameters):
         return '{0}/{1}?{2}'.format(self.baseurl, command, parameters)
 
+    @retry(TomcatError, tries=3, delay=5, backoff=2, logger=logging.getLogger('pytomcat.manager'))
     def _do_request(self, request, vhost, timeout=None):
         if timeout == None:
             timeout = self.timeout
