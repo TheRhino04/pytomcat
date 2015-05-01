@@ -1,6 +1,8 @@
 
 PyTomcat is a simple library to remotely manage Tomcat from Python
 
+I DON"T WANT THIS HERE
+
 The library uses Tomcat Manager text and JMX Proxy interfaces and
 therefore does not require any Java JMX libraries or JMX management
 ports to be open.
